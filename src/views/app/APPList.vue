@@ -2,8 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="serviceQuery.info"
-        placeholder="服务名/服务描述"
+        v-model="appQuery.info"
+        placeholder="app_id/租户名称"
         style="width: 200px"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -18,7 +18,7 @@
       >
         搜索
       </el-button>
-      <router-link :to="'/service/service_add_http'">
+      <router-link :to="'/app/app_add'">
         <el-button
           class="filter-item"
           style="margin-left: 10px"
@@ -26,29 +26,7 @@
           icon="el-icon-edit"
           @click="handleCreate"
         >
-          添加HTTP服务
-        </el-button>
-      </router-link>
-      <router-link :to="'/service/service_add_tcp'">
-        <el-button
-          class="filter-item"
-          style="margin-left: 10px"
-          type="primary"
-          icon="el-icon-edit"
-          @click="handleCreate"
-        >
-          添加TCP服务
-        </el-button>
-      </router-link>
-      <router-link :to="'/service/service_add_grpc'">
-        <el-button
-          class="filter-item"
-          style="margin-left: 10px"
-          type="primary"
-          icon="el-icon-edit"
-          @click="handleCreate"
-        >
-          添加GRPC服务
+          添加租户
         </el-button>
       </router-link>
     </div>
@@ -56,7 +34,7 @@
     <el-table
       :key="tableKey"
       v-loading="listLoading"
-      :data="serviceList"
+      :data="appList"
       border
       fit
       highlight-current-row
@@ -67,24 +45,19 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务名称" min-width="100px">
+      <el-table-column label="app_id" min-width="100px">
         <template slot-scope="{ row }">
-          <span>{{ row.service_name }}</span>
+          <span>{{ row.app_id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务描述" min-width="150px">
+      <el-table-column label="租户名称" min-width="150px">
         <template slot-scope="{ row }">
-          <span>{{ row.service_desc }}</span>
+          <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务类型" min-width="70px">
+      <el-table-column label="密钥" min-width="70px">
         <template slot-scope="{ row }">
-          <span>{{ row.load_type | loadTypeFilter }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="服务地址" min-width="150px">
-        <template slot-scope="{ row }">
-          <span>{{ row.service_addr }}</span>
+          <span>{{ row.secret }}</span>
         </template>
       </el-table-column>
       <el-table-column label="Qps" min-width="50px">
@@ -97,11 +70,6 @@
           <span>{{ row.qpd }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="节点数" min-width="50px">
-        <template slot-scope="{ row }">
-          <span>{{ row.total_node }}</span>
-        </template>
-      </el-table-column>
       <el-table-column
         label="操作"
         align="center"
@@ -109,25 +77,10 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row, $index }">
-          <router-link :to="'/service/service_stat/' + row.id">
+          <router-link :to="'/app/app_stat/' + row.id">
             <el-button type="primary" size="mini"> 统计 </el-button>
           </router-link>
-          <router-link
-            v-if="row.load_type === 0"
-            :to="'/service/service_edit_http/' + row.id"
-          >
-            <el-button type="primary" size="mini"> 修改 </el-button>
-          </router-link>
-          <router-link
-            v-if="row.load_type === 1"
-            :to="'/service/service_edit_tcp/' + row.id"
-          >
-            <el-button type="primary" size="mini"> 修改 </el-button>
-          </router-link>
-          <router-link
-            v-if="row.load_type === 2"
-            :to="'/service/service_edit_grpc/' + row.id"
-          >
+          <router-link :to="'/app/app_edit/' + row.id">
             <el-button type="primary" size="mini"> 修改 </el-button>
           </router-link>
           <el-button
@@ -144,63 +97,47 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      :page.sync="serviceQuery.page_num"
-      :limit.sync="serviceQuery.page_size"
-      @pagination="getServiceList"
+      :page.sync="appQuery.page_num"
+      :limit.sync="appQuery.page_size"
+      @pagination="getAppList"
     />
   </div>
 </template>
   
 <script>
-import { serviceList, serviceDelete } from "@/api/service";
+import { appList, appDelete } from "@/api/app";
 import waves from "@/directive/waves";
 import Pagination from "@/components/Pagination";
 
-const loadTypeOptions = [
-  { key: "0", display_name: "HTTP" },
-  { key: "1", display_name: "TCP" },
-  { key: "2", display_name: "GRPC" },
-];
-
-// arr to obj, such as { CN : "China", US : "USA" }
-const loadTypeKeyValue = loadTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name;
-  return acc;
-}, {});
-
 export default {
-  name: "ServiceList",
+  name: "APPList",
   components: { Pagination },
   directives: { waves },
-  filters: {
-    loadTypeFilter(type) {
-      return loadTypeKeyValue[type];
-    },
-  },
+  filters: {},
   data() {
     return {
       tableKey: 0,
-      serviceList: null,
+      appList: null,
       total: 0,
       listLoading: true,
-      serviceQuery: {
+      appQuery: {
         page_num: 1,
         page_size: 20,
         info: "",
       },
-      curService: {
+      curApp: {
         id: undefined,
       },
     };
   },
   created() {
-    this.getServiceList();
+    this.getAppList();
   },
   methods: {
-    getServiceList() {
+    getAppList() {
       this.listLoading = true;
-      serviceList(this.serviceQuery).then((response) => {
-        this.serviceList = response.data.list;
+      appList(this.appQuery).then((response) => {
+        this.appList = response.data.list;
         this.total = response.data.total;
 
         setTimeout(() => {
@@ -209,24 +146,24 @@ export default {
       });
     },
     handleFilter() {
-      this.serviceQuery.page_num = 1;
-      this.getServiceList();
+      this.appQuery.page_num = 1;
+      this.getAppList();
     },
     handleDelete(row, index) {
-      this.$confirm("此操作将删除该服务, 是否继续?", "提示", {
+      this.$confirm("此操作将删除该租户, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          serviceDelete(row.id).then((response) => {
+          appDelete(row.id).then((response) => {
             this.$notify({
               title: "Success",
               message: "删除成功",
               type: "success",
               duration: 2000,
             });
-            this.getServiceList();
+            this.getAppList();
           });
         })
         .catch(() => {

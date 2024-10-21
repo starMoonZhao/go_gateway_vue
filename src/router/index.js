@@ -87,9 +87,93 @@ export const constantRoutes = [
         component: () => import('@/views/service/ServiceList'),
         name: '服务列表',
         meta: { title: '服务列表', icon: 'component', affix: true }
-      }
+      },
+      {
+        path: 'service_stat/:id(\\d+)',
+        component: () => import('@/views/service/ServiceStat'),
+        name: '服务流量统计',
+        meta: { title: '服务流量统计', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'service_add_http',
+        component: () => import('@/views/service/ServiceHTTP'),
+        name: '添加HTTP服务',
+        meta: { title: '添加HTTP服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'service_edit_http/:id(\\d+)',
+        component: () => import('@/views/service/ServiceHTTP'),
+        name: '编辑HTTP服务',
+        meta: { title: '编辑HTTP服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'service_add_tcp',
+        component: () => import('@/views/service/ServiceTCP'),
+        name: '添加TCP服务',
+        meta: { title: '添加TCP服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'service_edit_tcp/:id(\\d+)',
+        component: () => import('@/views/service/ServiceTCP'),
+        name: '编辑TCP服务',
+        meta: { title: '编辑TCP服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'service_add_grpc',
+        component: () => import('@/views/service/ServiceGRPC'),
+        name: '添加GRPC服务',
+        meta: { title: '添加GRPC服务', icon: 'component', affix: false },
+        hidden: true
+      },
+      {
+        path: 'service_edit_grpc/:id(\\d+)',
+        component: () => import('@/views/service/ServiceGRPC'),
+        name: '编辑GRPC服务',
+        meta: { title: '编辑GRPC服务', icon: 'component', affix: false },
+        hidden: true
+      },
     ]
-  }
+  },
+  {
+    path: '/app',
+    component: Layout,
+    redirect: '/app/list',
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/app/APPList'),
+        name: '租户列表',
+        meta: { title: '租户列表', icon: 'user', affix: true }
+      },
+      {
+        path: 'app_stat/:id(\\d+)',
+        component: () => import('@/views/app/APPStat'),
+        name: '租户流量统计',
+        meta: { title: '租户流量统计', icon: 'user', affix: false },
+        hidden: true
+      },
+      {
+        path: 'app_add',
+        component: () => import('@/views/app/APP'),
+        name: '添加租户',
+        meta: { title: '添加租户', icon: 'user', affix: false },
+        hidden: true
+      },
+      {
+        path: 'app_edit/:id(\\d+)',
+        component: () => import('@/views/app/APP'),
+        name: '编辑租户',
+        meta: { title: '编辑租户', icon: 'user', affix: false },
+        hidden: true
+      },
+    ]
+  },
+
 ]
 
 /**

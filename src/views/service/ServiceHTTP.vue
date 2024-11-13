@@ -73,7 +73,7 @@
           </el-form-item>
           <el-form-item label="Header转换">
             <el-input
-              v-model="form.header_transfor"
+              v-model="form.header_transfer"
               type="textarea"
               placeholder="header转换支持增加(add)、删除(del)、修改(edit) 格式: add headname headvalue 多条换行"
             ></el-input>
@@ -192,7 +192,7 @@ export default {
         need_strip_uri: 0,
         need_websocket: 1,
         url_rewrite: "",
-        header_transfor: "",
+        header_transfer: "",
         open_auth: 0,
         white_list: "",
         black_list: "",
@@ -248,8 +248,8 @@ export default {
           /,/g,
           "\n"
         );
-        this.form.header_transfor =
-          response.data.http_rule.header_transfor.replace(/,/g, "\n");
+        this.form.header_transfer =
+          response.data.http_rule.header_transfer.replace(/,/g, "\n");
         this.form.round_type = response.data.load_balance.round_type;
         this.form.ip_list = response.data.load_balance.ip_list.replace(
           /,/g,
@@ -291,7 +291,7 @@ export default {
 
       //替换表单中所有以换行替代逗号的内容
       data.url_rewrite = data.url_rewrite.replace(/\n/g, ",");
-      data.header_transfor = data.header_transfor.replace(/\n/g, ",");
+      data.header_transfer = data.header_transfer.replace(/\n/g, ",");
       data.white_list = data.white_list.replace(/\n/g, ",");
       data.black_list = data.black_list.replace(/\n/g, ",");
       data.ip_list = data.ip_list.replace(/\n/g, ",");

@@ -91,30 +91,6 @@
               placeholder="格式: 50 多条换行"
             ></el-input>
           </el-form-item>
-          <el-form-item label="建立连接超时">
-            <el-input
-              v-model="form.upstream_connect_timeout"
-              placeholder="单位s，0表示无限制"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="获取header超时">
-            <el-input
-              v-model="form.upstream_header_timeout"
-              placeholder="单位s，0表示无限制"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="链接最大空闲时间">
-            <el-input
-              v-model="form.upstream_idle_timeout"
-              placeholder="单位s，0表示无限制"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="最大空闲链接数">
-            <el-input
-              v-model="form.upstream_max_idle"
-              placeholder="0表示无限制"
-            ></el-input>
-          </el-form-item>
 
           <el-form-item>
             <el-button
@@ -153,10 +129,6 @@ export default {
         round_type: 2,
         ip_list: "",
         weight_list: "",
-        upstream_connect_timeout: null,
-        upstream_header_timeout: null,
-        upstream_idle_timeout: null,
-        upstream_max_idle: null,
       },
       submitButDisabled: false,
       rules: {
@@ -205,16 +177,6 @@ export default {
           /,/g,
           "\n"
         );
-        this.form.upstream_connect_timeout =
-          response.data.load_balance.upstream_connect_timeout;
-        this.form.upstream_header_timeout =
-          response.data.load_balance.upstream_header_timeout;
-        this.form.upstream_idle_timeout =
-          response.data.load_balance.upstream_idle_timeout;
-        this.form.upstream_max_idle =
-          response.data.load_balance.upstream_max_idle;
-        this.form.upstream_max_idle =
-          response.data.load_balance.upstream_max_idle;
         this.form.open_auth = response.data.access_control.open_auth;
         this.form.black_list = response.data.access_control.black_list.replace(
           /,/g,

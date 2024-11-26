@@ -102,13 +102,13 @@
           </el-form-item>
           <el-form-item label="客户端限流">
             <el-input
-              v-model="form.clientip_flow_limit"
+              v-model.number="form.clientip_flow_limit"
               placeholder="0表示无限制"
             ></el-input>
           </el-form-item>
           <el-form-item label="服务端限流">
             <el-input
-              v-model="form.service_flow_limit"
+              v-model.number="form.service_flow_limit"
               placeholder="0表示无限制"
             ></el-input>
           </el-form-item>
@@ -196,8 +196,8 @@ export default {
         open_auth: 0,
         white_list: "",
         black_list: "",
-        clientip_flow_limit: null,
-        service_flow_limit: null,
+        clientip_flow_limit: 0,
+        service_flow_limit: 0,
         round_type: 2,
         ip_list: "",
         weight_list: "",

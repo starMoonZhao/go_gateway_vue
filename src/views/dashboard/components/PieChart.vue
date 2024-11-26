@@ -27,7 +27,7 @@ export default {
       required: true,
       default() {
         return {
-          title: "今日流量统计",
+          title: "服务类型占比",
           legend: ["Industries", "Technology", "Forex", "Gold", "Forecasts"],
           series: [
             { value: 320, name: "Industries" },

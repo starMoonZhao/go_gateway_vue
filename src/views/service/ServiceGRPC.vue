@@ -23,7 +23,7 @@
           <el-form-item label="端口">
             <el-input
               placeholder="需要设置8001-8999范围内数字，必填"
-              v-model="form.port"
+              v-model.number="form.port"
               :disabled="isEdit"
             >
             </el-input>
